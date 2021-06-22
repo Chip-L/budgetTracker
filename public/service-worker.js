@@ -20,7 +20,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((cache) => cache.addAll(FILES_TO_CACHE))
+      .then((cache) => FILES_TO_CACHE.forEach((file) => cache.add(file)))
       .then(self.skipWaiting)
   );
 });
