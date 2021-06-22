@@ -1,16 +1,16 @@
 const FILES_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/manifest.webmanifest",
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
   // JS
-  "/index.js",
-  "/indexedDB.js",
+  "./index.js",
+  "./indexedDB.js",
   // CSS
   "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
-  "/styles.css",
+  "./styles.css",
   // icons
-  "/icons/icon-192x192.png",
-  "/icons/icon-512x512.png",
+  "./icons/icon-192x192.png",
+  "./icons/icon-512x512.png",
 ];
 
 const CACHE = "static-v1";
@@ -47,50 +47,9 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// retrieve assets from cache - first check cache - then check online (expecting the online DB to be fairly static)
-/*
-self.addEventListener("fetch", async (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      const cache = await caches.open(DATA_CACHE_NAME);
-      const response = await      fetch(event.request);
-      await cache.put(event.request, response.clone());
-      return response;
-    })
-  );
-});
-*/
-/*
-self.addEventListener("fetch", (event) => {
-  // if (event.request.url.startsWith(self.location.origin)) {
-  //<== IF start on this page
-  event.respondWith(
-    caches
-      .match(event.request) //<== check the cache for the response then sends it back as the response
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse; //<== return the cached response and end
-        }
-        // not in the cache -- then do this: (get data from server and store it in cache)
-        return caches.open(DATA_CACHE_NAME).then((cache) => {
-          return fetch(event.request).then((response) => {
-            return cache.put(event.request, response.clone()).then(() => {
-              return response;
-            });
-          });
-        });
-      })
-  );
-  // }
-});
-*/
-
+// retrieve assets from cache
 self.addEventListener("fetch", function (evt) {
-  // cache successful requests to the API
-  //(this will only catch if we are doing API routes, change if data is captured in other routes)
+  // cache successful get requests to the API
   if (evt.request.url.includes("/api/")) {
     evt.respondWith(
       caches
@@ -102,7 +61,8 @@ self.addEventListener("fetch", function (evt) {
               console.log("evt.request:", evt.request);
               // If the response was good, clone it and store it in the cache -- but only if it was a get (we want to keep all of the "get" data)
               if (response.status === 200 && evt.request.method === "GET") {
-                cache.put(evt.request.url, response.clone()); // <== update the cache with current data
+                // this causes a problem because the get data is stale. However, the response of the post data will overwrite this.
+                cache.put(evt.request.url, response.clone());
               }
 
               return response;
