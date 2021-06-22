@@ -57,8 +57,6 @@ self.addEventListener("fetch", function (evt) {
         .then((cache) => {
           return fetch(evt.request) // <== try to go online and fetch the data
             .then((response) => {
-              console.log("response:", response);
-              console.log("evt.request:", evt.request);
               // If the response was good, clone it and store it in the cache -- but only if it was a get (we want to keep all of the "get" data)
               if (response.status === 200 && evt.request.method === "GET") {
                 // this causes a problem because the get data is stale. However, the response of the post data will overwrite this.
@@ -68,22 +66,15 @@ self.addEventListener("fetch", function (evt) {
               return response;
             })
             .catch(async (err) => {
-              console.log("no network:", err);
-              console.log("request:", evt.request);
-              response = await cache.match(evt.request);
-              console.log("response:", response);
               // Network request failed, try to get it from the cache.
               return cache.match(evt.request); //<== try to get the data to/from cache
             });
         })
         .catch((err) => console.log(err))
     );
-
     return;
   }
 
-  // if the request is not for the API, serve static assets using "offline-first" approach.
-  // see https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook#cache-falling-back-to-network
   evt.respondWith(
     caches.match(evt.request).then(function (response) {
       return response || fetch(evt.request);
