@@ -10,7 +10,7 @@ const FILES_TO_CACHE = [
   "./styles.css",
   // icons
   "./icons/icon-192x192.png",
-  "./icons/icon-512x512.png",
+  "./icons/icon-512x512.png"
 ];
 
 const CACHE = "static-v1";
@@ -22,8 +22,8 @@ self.addEventListener("install", (event) => {
       .open(CACHE)
       .then((cache) =>
         FILES_TO_CACHE.forEach((file) => {
-          console.log(file);
-          cache.add(file);
+          
+          cache.add(file).then(()=>console.log(file));
         })
       )
       .then(self.skipWaiting)
