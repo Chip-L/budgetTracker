@@ -1,6 +1,6 @@
 let db;
 
-const request = window.indexedDB.open("budget", 1);
+const request = indexedDB.open("budget", 1);
 
 // taking just the event target (the new open DB request (IDBOpenDBRequest))
 request.onupgradeneeded = ({ target }) => {
@@ -66,7 +66,6 @@ function checkDatabase() {
 
             // Clear existing entries because our bulk add was successful
             currentStore.clear();
-            console.log("Cleared store");
           }
         });
     }
