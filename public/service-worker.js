@@ -10,7 +10,7 @@ const FILES_TO_CACHE = [
   "./styles.css",
   // icons
   "./icons/icon-192x192.png",
-  "./icons/icon-512x512.png"
+  "./icons/icon-512x512.png",
 ];
 
 const CACHE = "static-v1";
@@ -18,15 +18,7 @@ const DATA_CACHE_NAME = "data-v1";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches
-      .open(CACHE)
-      .then((cache) =>
-        FILES_TO_CACHE.forEach((file) => {
-          
-          cache.add(file).then(()=>console.log(file));
-        })
-      )
-      .then(self.skipWaiting)
+    caches.open(CACHE).then(cache.addAll(FILES_TO_CACHE)).then(self.skipWaiting)
   );
 });
 
