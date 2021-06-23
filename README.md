@@ -22,7 +22,7 @@ When brought back online:
 - [Acceptance Criteria](#acceptance-criteria)
 - [Usage](#usage)
 - [Technologies](#technologies)
-- [Credits](#credits)
+- [Comments](#comments)
 
 ## User Story
 
@@ -59,3 +59,7 @@ https://cryptic-depths-27411.herokuapp.com/
 - PWA Processes:
   - indexedDB
   - Offline caching via service workers
+
+## Comments
+
+I'm still looking in to how to keep the data from going stale. The way I do the cache, I'm only caching the GET, which only happens when the page is refreshed. So if you do a bunch of updates on the page, then go offline, and then refresh - you will "lose" all of the values you had entered since the last refresh. The values are updating to the DB and you can add more that will update to the DB, but until you come back online and refresh the data, the values in the cache won't change.
